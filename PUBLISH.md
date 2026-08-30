@@ -28,24 +28,33 @@ git push -u origin main
 
 3. 仓库 **About → Topics** 添加话题：`dsh-plugin`（DSH 生态发现入口之一）、`deepseek-harness`、`toutiao`
 
-## 第二步：向 awesome-dsh-plugin 提 PR
+## 第二步：向 awesome-dsh-plugin 提 PR（正确姿势：改 data/plugins，不是手改 README）
 
-fork [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) 后，在 **两个文件** 的 `### 🛠️ 工具与能力` 小节末尾各加一行（这是官方贡献要求：中英 README 都要加）：
+> ⚠️ 教训：这个仓库的**两个 README 由脚本从 `data/plugins/*.yml` 生成**，手改 README 会在 CI 的 `generate-readme --check` 挂掉（本插件踩过）。正确做法：
 
-**README.zh.md：**
-
-```markdown
-- [RyanShen3/dsh-toutiao-reader](https://github.com/RyanShen3/dsh-toutiao-reader) — 读网页/头条文章全文的 webfetch 工具：三级策略（直连 → Edge 常驻无头浏览器 CDP → dump-dom），自动识别头条反爬质询页，附 toutiao-reader 实战经验技能。
+```yaml
+# 新增 data/plugins/RyanShen3__dsh-toutiao-reader.yml
+url: https://github.com/RyanShen3/dsh-toutiao-reader
+name: RyanShen3/dsh-toutiao-reader
+category: tools
+description:
+  en: "webfetch tool for full-text web/Toutiao articles: 3-tier strategy (direct fetch → resident Edge CDP headless browser → dump-dom fallback), with automatic Toutiao anti-bot challenge handling plus a bundled experience skill."
+  zh: "读网页/头条文章全文的 webfetch 工具：三级策略（直连 → Edge 常驻无头浏览器 CDP → dump-dom 兜底），自动识别头条反爬质询页，附 toutiao-reader 实战经验技能。"
 ```
 
-**README.md（英文列表）：**
-
-```markdown
-- [RyanShen3/dsh-toutiao-reader](https://github.com/RyanShen3/dsh-toutiao-reader) — webfetch tool for full-text web/Toutiao articles: 3-tier strategy (direct → resident Edge CDP headless → dump-dom) with automatic Toutiao anti-bot challenge handling, plus a bundled experience skill.
+```sh
+# 然后在 fork 本地执行（一次性重现，_fix-pr.cmd 已封装）
+git clone --branch add-dsh-toutiao-reader --single-branch https://github.com/RyanShen3/awesome-dsh-plugin
+cd awesome-dsh-plugin
+npm ci
+node scripts/generate-readme.mjs    # 重新生成两个 README
+node scripts/generate-readme.mjs --check   # 应与提交完全一致
+git add data/plugins/RyanShen3__dsh-toutiao-reader.yml README.md README.zh.md
+git commit -m "chore: add dsh-toutiao-reader"
+git push origin add-dsh-toutiao-reader
 ```
 
-PR 标题建议：`Add dsh-toutiao-reader (webfetch tool + toutiao-reader skill)`
-
+合并前置条件（CI 自动检查，`)：仓库创建满 1 天 / **≥10 个提交** / `dsh-plugin` topic / package.json 有 `dsh.bundle`。上架后 `regate` 工作流每 6 小时自动重跑门禁，仓库满 1 天后闸门自动转绿，无需手动重推。
 ## 可选加强（不阻塞上架）
 
 - **npm 发布**：`npm publish`（包名 `dsh-toutiao-reader`）后，市场安装走「仓库验证过的 npm 包」通道，秒装且不依赖 GitHub 网络。发布前确认 package.json 的 repository 与 GitHub 仓库一致（name-squatting 保护）

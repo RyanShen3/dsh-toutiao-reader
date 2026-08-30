@@ -1,0 +1,28 @@
+{
+  "name": "dsh-toutiao-reader",
+  "version": "0.1.0",
+  "description": "浏览今日头条文章的实战经验打包成 DSH 插件：webfetch 工具（三级策略：直连 → Edge 常驻无头浏览器 CDP → dump-dom 兜底，自动识别头条反爬质询页）+ toutiao-reader 技能（URL 形态、质询处理、常驻浏览器管理、沙箱与代理经验）。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./fetch": "./lib/fetch.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "skills", "cordis.patch.yml", "README.md", "README.zh.md", "CHANGELOG.md", "LICENSE"],
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" }
+  },
+  "keywords": ["deepseek-harness", "dsh", "dsh-plugin", "cordis", "toutiao", "今日头条", "webfetch", "article", "reader", "headless", "cdp", "webfetch", "scrape", "anti-bot"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanShen3/dsh-toutiao-reader.git"
+  },
+  "homepage": "https://github.com/RyanShen3/dsh-toutiao-reader#readme",
+  "bugs": { "url": "https://github.com/RyanShen3/dsh-toutiao-reader/issues" },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6"
+  }
+}
